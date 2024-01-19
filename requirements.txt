@@ -8,5 +8,8 @@ pettingzoo[mpe]==1.12.0
 supersuit==3.2.0
 numpy==1.20.3
 importlib-metadata==4.13.0
-gym==0.20.0
 PyYAML
+matplotlib
+pandas==1.3.5
+scikit-learn==1.0.2
+simplejson

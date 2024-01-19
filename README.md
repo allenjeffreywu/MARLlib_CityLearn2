@@ -25,6 +25,19 @@
 [![Organization](https://img.shields.io/badge/Organization-PKU_MARL-blue.svg)](https://github.com/Replicable-MARL/MARLlib)
 [![Awesome](https://awesome.re/badge.svg)](https://marllib.readthedocs.io/en/latest/resources/awesome.html)
 
+# Allen Edit:
+The requirements.txt file here has been edited to be compatible with CityLearn2. Please install with these requirements and install CityLearn with:
+```bash 
+pip install --no-deps CityLearn
+pip install setuptools==65.5.0
+pip install wheel==0.38.0
+pip install gym==0.21.0
+```
+For my own purposes, I am keeping this version of pytorch handy (for 3000 series GPU)
+
+```
+conda install -y pytorch==1.9 torchvision torchaudio cudatoolkit=11.1 -c pytorch -c nvidia
+```
 
 | :exclamation:  News |
 |:-----------------------------------------|
