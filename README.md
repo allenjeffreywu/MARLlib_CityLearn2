@@ -38,6 +38,7 @@ For my own purposes, I am keeping this version of pytorch handy (for 3000 series
 ```
 conda install -y pytorch==1.9 torchvision torchaudio cudatoolkit=11.1 -c pytorch -c nvidia
 ```
+## Make sure to install CUDA
 
 | :exclamation:  News |
 |:-----------------------------------------|
