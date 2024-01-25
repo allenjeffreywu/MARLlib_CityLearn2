@@ -1,4 +1,5 @@
 .idea/*
+.vscode
 exp_results/*
 
 # Byte-compiled / optimized / DLL files
