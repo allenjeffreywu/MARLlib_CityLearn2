@@ -1,0 +1,15 @@
+env: citylearn
+
+# you can create specific experiment mappings here (fontana1, fontana2, etc)
+# set all your CityLearn parameters here!
+# schema is absolute path of the experiment you want to work with. relative path does not work (CityLearn throws an error!)
+env_args:
+  map_name: "fontana"
+  schema: "/home/allenwu/Desktop/work/MARLlib_CityLearn2/citylearn_challenge_2022_phase_1/schema.json"
+  central_agent: False
+  num_agents: 5
+  episode_limit: 1
+
+# global experiment values can be set here.
+# SEE: run_cc.py:run_cc() for more details of all the options you can have
+agent_level_batch_update: True

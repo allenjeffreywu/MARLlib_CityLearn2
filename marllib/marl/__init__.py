@@ -205,7 +205,7 @@ def build_model(
     else:
         raise NotImplementedError("{} not supported agent model arch".format(model_preference["core_arch"]))
 
-    if len(environment[0].observation_space.spaces["obs"].shape) == 1:
+    if hasattr(environment[0].observation_space, "spaces") and len(environment[0].observation_space.spaces["obs"].shape) == 1:
         encoder = "fc_encoder"
     else:
         encoder = "cnn_encoder"
