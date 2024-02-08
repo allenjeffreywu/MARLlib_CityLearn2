@@ -1,8 +1,12 @@
+from typing import List
+import gym
+from gym.spaces import Dict as GymDict, Discrete, Box
 import numpy as np
 from marllib.envs.base_env import ENV_REGISTRY
 from ray.rllib.env.multi_agent_env import MultiAgentEnv
 from marllib import marl
 from citylearn.citylearn import CityLearnEnv
+from citylearn.wrappers import NormalizedSpaceWrapper
 
 # register all scenario with env class
 REGISTRY = {}
@@ -37,28 +41,63 @@ class RllibCityLearnEnv(MultiAgentEnv):
             shared_observations=env_config.get("shared_observations"), # type: ignore
             random_seed=env_config.get("random_seed") # type: ignore
             )
-        self.action_space = self.env.action_space
-        self.observation_space = self.env.observation_space
+        self.env = NormalizedSpaceWrapper(self.env)
+        # self.action_space = self.env.action_space
+        # self.observation_space = self.env.observation_space
+        
+        # print(f"action space: {self.action_space}")
+        # print(f"low: {self.env.observation_space[0].low}")
+        # print(f"high: {self.env.observation_space[0].high}")
+        # print(f"observation space: {self.env.observation_space}")
+        # completely different!
+        # override the observation space checker?
+        
+        # self.observation_space = GymDict({
+        #     "obs": Box(
+        #         low = self.env.observation_space[0].low, # TODOcentral agent is now true, this should be normalized across everything 
+        #         high = self.env.observation_space[0].high,
+        #         shape= (self.env.observation_space[0].shape),
+        #         dtype = np.float32)
+        # })
         self.num_agents = env_config["num_agents"]
         self.episode_limit = env_config["episode_limit"]
         self.agents = ["agent_{}".format(i) for i in range(self.num_agents)]
         self.env_config = env_config
+        
+    @property
+    def action_space(self) -> gym.Space:
+        a_space = GymDict()
+        for i, agent in enumerate(self.agents):
+            a_space[agent] = self.env.action_space[i]
+        return a_space
+    
+    @property
+    def observation_space(self) -> gym.Space:
+        o_space = GymDict()
+        for i, agent in enumerate(self.agents):
+            o_space[agent] = self.env.observation_space[i]
+        o_space["obs"] = Box(
+                low = self.env.observation_space[0].low,
+                high = self.env.observation_space[0].high,
+                shape = self.env.observation_space[0].shape,
+                dtype = np.float32)
+        return o_space
         
         
     def step(self, actions):
         """ Returns reward, terminated, info """
         action_ls = []
         for i, agent in enumerate(self.agents):
-            action_ls.append(actions[agent])
+            action_ls.append(list(actions[agent]))
         o, r, d, info = self.env.step(action_ls)
         rewards = {}
         obs = {}
         for i, agent in enumerate(self.agents):
             obs[agent] = {
-                "obs": np.array(o[i])
+                "obs": o[i]
             }
-            rewards[agent] = r
-        dones = d
+            rewards[agent] = r[i]
+        dones = {"__all__": d}
         return obs, rewards, dones, info
 
     def reset(self):
@@ -67,7 +106,7 @@ class RllibCityLearnEnv(MultiAgentEnv):
         obs = {}
         for i, agent in enumerate(self.agents):
             obs[agent] = {
-                "obs": np.array(o[i])
+                "obs": o[i]
             }
         return obs
 

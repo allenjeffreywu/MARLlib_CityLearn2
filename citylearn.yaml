@@ -12,4 +12,7 @@ env_args:
 
 # global experiment values can be set here.
 # SEE: run_cc.py:run_cc() for more details of all the options you can have
+mask_flag: False
+global_state_flag: False
 agent_level_batch_update: True
+opp_action_in_cc: True
