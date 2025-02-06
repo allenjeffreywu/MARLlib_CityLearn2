@@ -1,3 +1,5 @@
+No longer WIP
+
 <div align="center">
 
 <img src=docs/source/images/logo1.png width=75% />
